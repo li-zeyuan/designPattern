@@ -5,12 +5,12 @@
 
 ### 创建型模式
 
-- 简单工厂模式(simple factory)
-- 工厂方法模式(factory method)
-- 抽象工厂模式(abstract factory)
-- 创建者模式(builder)
-- 原型模式(prototype)
-- 单例模式(singleton)
+- 简单工厂模式
+- 工厂方法模式
+- 抽象工厂模式 *
+- 创建者模式
+- 原型模式
+- 单例模式
 
 ### 参考
 
