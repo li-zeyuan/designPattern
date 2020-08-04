@@ -2,70 +2,76 @@ package abstractfactory
 
 import "fmt"
 
-//-----------抽象模式工厂接口----------
-type DAOFactory interface {
-	CreateOrderMainDAO() OrderMainDAO
-	CreateOrderDetailDAO() OrderDetailDAO
+//-----------【抽象工厂】接口----------
+type AbstractFactory interface {
+	CreateOrderMainDAO() AbstractProductOrderMain     // 创建主订单抽象方法
+	CreateOrderDetailDAO() AbstractProductOrderDetail // 创建订单详情抽象方法
 }
 
-//-----------RDB 抽象工厂类-----------
-type RDBDAOFactory struct{}
+//===========================================
 
-func (*RDBDAOFactory) CreateOrderMainDAO() OrderMainDAO {
-	return &RDBMainDAO{}
+//-----------RDB 【具体工厂】类-----------
+type ConcreteFactoryRDB struct{}
+
+func (*ConcreteFactoryRDB) CreateOrderMainDAO() AbstractProductOrderMain {
+	return &ConcreteProductRDBMain{} // 返回具体的产品类
 }
 
-func (*RDBDAOFactory) CreateOrderDetailDAO() OrderDetailDAO {
-	return &RDBDetailDAO{}
+func (*ConcreteFactoryRDB) CreateOrderDetailDAO() AbstractProductOrderDetail {
+	return &ConcreteProductRDBDetail{}
 }
 
-// ------------XML 抽象工厂类-----------
-type XMLDAOFactory struct{}
+//===========================================
 
-func (*XMLDAOFactory) CreateOrderMainDAO() OrderMainDAO {
-	return &XMLMainDAO{}
+// ------------XML 【具体工厂】类-----------
+type ConcreteFactoryXML struct{}
+
+func (*ConcreteFactoryXML) CreateOrderMainDAO() AbstractProductOrderMain {
+	return &ConcreteProductXMLMain{}
 }
 
-func (*XMLDAOFactory) CreateOrderDetailDAO() OrderDetailDAO {
-	return &XMLDetailDAO{}
+func (*ConcreteFactoryXML) CreateOrderDetailDAO() AbstractProductOrderDetail {
+	return &ConcreteProductXMLDetail{}
 }
 
+//===========================================
 
-// -----------rdb/xml 主订单存储接口-------------
-type OrderMainDAO interface {
-	SaveOrderMain()
+// -----------【抽象产品】接口-------------
+type AbstractProductOrderMain interface {
+	SaveOrderMain()			// save主订单的抽象方法
 }
 
-// ------------rdb主订单存储类---------------
-type RDBMainDAO struct{}
+// ------------【具体产品】类---------------
+type ConcreteProductRDBMain struct{}
 
-func (*RDBMainDAO) SaveOrderMain() {
+func (*ConcreteProductRDBMain) SaveOrderMain() {
 	fmt.Print("rdb main save\n")
 }
 
-// -----------------XML主订单存储类---------
-type XMLMainDAO struct{}
+// -----------------【具体产品】类---------
+type ConcreteProductXMLMain struct{}
 
-func (*XMLMainDAO) SaveOrderMain() {
+func (*ConcreteProductXMLMain) SaveOrderMain() {
 	fmt.Print("xml main save\n")
 }
 
+//==========================================
 
-// -----------rdb/xml 订单详情存储接口-------------
-type OrderDetailDAO interface {
-	SaveOrderDetail()
+// -----------【抽象产品】接口-------------
+type AbstractProductOrderDetail interface {
+	SaveOrderDetail()   	// save订单详情的抽象方法
 }
 
-// ------------rdb订单详情存储类---------------
-type RDBDetailDAO struct{}
+// ------------【具体产品】类---------------
+type ConcreteProductRDBDetail struct{}
 
-func (*RDBDetailDAO) SaveOrderDetail() {
+func (*ConcreteProductRDBDetail) SaveOrderDetail() {
 	fmt.Print("rdb detail save\n")
 }
 
-// -----------------XML订单详情存储类---------
-type XMLDetailDAO struct{}
+// ------------【具体产品】类---------------
+type ConcreteProductXMLDetail struct{}
 
-func (*XMLDetailDAO) SaveOrderDetail() {
+func (*ConcreteProductXMLDetail) SaveOrderDetail() {
 	fmt.Print("xml detail save")
 }

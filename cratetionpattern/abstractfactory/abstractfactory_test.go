@@ -1,13 +1,13 @@
 package abstractfactory
 
-func getMainAndDetail(factory DAOFactory) {
+func getMainAndDetail(factory AbstractFactory) {
 	factory.CreateOrderMainDAO().SaveOrderMain()
 	factory.CreateOrderDetailDAO().SaveOrderDetail()
 }
 
 // RDB存储
 func ExampleRdbFactory() {
-	factory := &RDBDAOFactory{}
+	factory := &ConcreteFactoryRDB{}
 	getMainAndDetail(factory)
 	// Output:
 	// rdb main save
@@ -16,8 +16,8 @@ func ExampleRdbFactory() {
 
 // XML存储
 func ExampleXmlFactory() {
-	var factory DAOFactory
-	factory = &XMLDAOFactory{}
+	var factory AbstractFactory
+	factory = &ConcreteFactoryXML{}
 	getMainAndDetail(factory)
 	// Output:
 	// xml main save
