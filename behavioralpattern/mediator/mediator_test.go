@@ -1,13 +1,15 @@
-package behavioralpattern
+package mediator
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestMediator(t *testing.T)  {
-	mediator := GetMediatorInstance()
-	mediator.CD= &CDDriver{}
-	mediator.CPU = &CPU{}
-	mediator.Video  = &VideoCard{}
-	mediator.Sound  = &SoundCard{}
+	mediator := mediator2.GetMediatorInstance()
+	mediator.CD= &mediator2.CDDriver{}
+	mediator.CPU = &mediator2.CPU{}
+	mediator.Video  = &mediator2.VideoCard{}
+	mediator.Sound  = &mediator2.SoundCard{}
 
 	mediator.CD.ReadData()
 

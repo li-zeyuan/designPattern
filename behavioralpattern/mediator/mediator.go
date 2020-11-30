@@ -1,4 +1,4 @@
-package behavioralpattern
+package mediator
 
 import (
 	"fmt"
