@@ -35,3 +35,5 @@
 ### 参考
 
 - https://github.com/senghoo/golang-design-pattern
+- http://c.biancheng.net/design_pattern/
+- https://design-patterns.readthedocs.io/zh_CN/latest/read_uml.html
