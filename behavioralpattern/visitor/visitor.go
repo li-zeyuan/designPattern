@@ -1,80 +1,46 @@
-package visitor
+package main
 
-import (
-	"fmt"
-)
+import "fmt"
 
-// 抽象元素接口
-type Customer interface {
-	Accept(Visitor)
-}
-
-// 抽象访问接口
+// 抽象访问者接口
 type Visitor interface {
-	Visit(Customer)
+	VisitCircle(*Circle)
+	VisitSquare(*Square)
+	VisitTriangle(*Triangle)
 }
 
-// 对象结构类
-type CustomerCol struct {
-	customers []Customer
+// ====================================
+
+// 具体访问者类：计算面积
+type CalculateAreaVisitor struct {
+	TotalArea float64
 }
 
-func (c *CustomerCol)Add(customer Customer)  {
-	c.customers = append(c.customers, customer)
+func (a *CalculateAreaVisitor) VisitCircle(c *Circle) {
+	area := 3.14 * c.Radius * c.Radius
+	fmt.Printf("Calculating area for circle (radius=%.2f): %.2f\n", c.Radius, area)
+	a.TotalArea += area
+}
+func (a *CalculateAreaVisitor) VisitSquare(s *Square) {
+	area := s.Side * s.Side
+	fmt.Printf("Calculating area for square (side=%.2f): %.2f\n", s.Side, area)
+	a.TotalArea += area
+}
+func (a *CalculateAreaVisitor) VisitTriangle(t *Triangle) {
+	area := 0.5 * t.Base * t.Height
+	fmt.Printf("Calculating area for triangle (base=%.2f, height=%.2f): %.2f\n", t.Base, t.Height, area)
+	a.TotalArea += area
 }
 
-func (c *CustomerCol)DO(visitor Visitor)  {
-	for _, customer := range c.customers {
-		customer.Accept(visitor)
-	}
+// 具体访问者类：导出XML
+type ExportXMLVisitor struct{}
+
+func (x *ExportXMLVisitor) VisitCircle(c *Circle) {
+	fmt.Printf(`<Circle radius="%.2f"/>`+"\n", c.Radius)
 }
-
-// 具体元素类
-type EnterpriseCustomer struct {
-	name string
+func (x *ExportXMLVisitor) VisitSquare(s *Square) {
+	fmt.Printf(`<Square side="%.2f"/>`+"\n", s.Side)
 }
-
-func NewEnterpriseCustomer(name string) *EnterpriseCustomer {
-	return &EnterpriseCustomer{
-		name:name,
-	}
-}
-
-func (e *EnterpriseCustomer)Accept(visitor Visitor)  {
-	visitor.Visit(e)
-}
-
-type IndividualCustomer struct {
-	name string
-}
-
-func NewIndividualCustomer(name string) *IndividualCustomer {
-	return &IndividualCustomer{
-		name: name,
-	}
-}
-
-func (c *IndividualCustomer) Accept(visitor Visitor) {
-	visitor.Visit(c)
-}
-
-// 具体访问类
-type ServiceRequestVisitor struct {}
-
-func (s *ServiceRequestVisitor) Visit(customer Customer) {
-	switch c := customer.(type) {
-	case *EnterpriseCustomer:
-		fmt.Printf("serving enterprise customer %s\n", c.name)
-	case *IndividualCustomer:
-		fmt.Printf("serving individual customer %s\n", c.name)
-	}
-}
-
-type AnalysisVisitor struct{}
-
-func (*AnalysisVisitor) Visit(customer Customer) {
-	switch c := customer.(type) {
-	case *EnterpriseCustomer:
-		fmt.Printf("analysis enterprise customer %s\n", c.name)
-	}
+func (x *ExportXMLVisitor) VisitTriangle(t *Triangle) {
+	fmt.Printf(`<Triangle base="%.2f" height="%.2f"/>`+"\n", t.Base, t.Height)
 }
