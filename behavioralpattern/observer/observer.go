@@ -2,47 +2,53 @@ package observer
 
 import "fmt"
 
-// ===================目标对象=============
-type Subject struct {
-	observers []Observer // 观察者列表
-	context   string     // 消息
+
+// ==================抽象发布主题接口========
+type Subject interface {
+	Register(observer Observer)
+	Unregister(observer Observer)
+	NotifyObservers(data string)
 }
 
-func NewSubject() *Subject {
-	return &Subject{
-		observers: make([]Observer, 0),
+// ===================具体发布主题对象=============
+type ConcreteSubject struct {
+	observers map[string]Observer // 观察者列表
+}
+
+func NewConcreteSubject() Subject {
+	return &ConcreteSubject{
+		observers: make(map[string]Observer),
 	}
 }
 
-func (s *Subject) Attach(o Observer) {
-	s.observers = append(s.observers, o)
+func (s *ConcreteSubject) Register(observer Observer) {
+	observerID := fmt.Sprintf("%p", observer)
+	s.observers[observerID] = observer
 }
 
-func (s *Subject) UpdateContext(context string) {
-	s.context = context
-	s.notify()
+func (s *ConcreteSubject) Unregister(observer Observer) {
+	observerID := fmt.Sprintf("%p", observer)
+	delete(s.observers, observerID)
 }
 
-func (s *Subject) notify() {
-	for _, o := range s.observers {
-		o.Update(s)
+func (s *ConcreteSubject) NotifyObservers(data string) {
+	for _, observer := range s.observers {
+		observer.Notify(data)
 	}
 }
 
-// ================观察者抽象接口================
+// ================抽象观察者接口================
 type Observer interface {
-	Update(subject *Subject)
+	Notify(data string)
 }
 
-// ===============观察者类=================
-type Reader struct {
-	name string
+// ===============具体观察者对象=================
+type ConcreteObserver struct {
+	ID   string
+	Data string
 }
 
-func NewReader1(name string) *Reader {
-	return &Reader{name: name}
-}
-
-func (r1 *Reader) Update(s *Subject) {
-	fmt.Printf("%s receive %s\n", r1.name, s.context)
+func (o *ConcreteObserver) Notify(data string) {
+	fmt.Printf("Observer %s received: %s\n", o.ID, data)
+	o.Data = data
 }
