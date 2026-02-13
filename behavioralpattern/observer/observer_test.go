@@ -2,16 +2,16 @@ package observer
 
 import "testing"
 
-func TestObserver(t *testing.T)  {
-	subject := new(Subject)
+func TestObserver(t *testing.T) {
+	subject := NewConcreteSubject()
 
-	reader1 := NewReader1("reader1")
-	reader2 := NewReader1("reader2")
-	reader3 := NewReader1("reader3")
+	observer1 := &ConcreteObserver{ID: "1"}
+	observer2 := &ConcreteObserver{ID: "2"}
 
-	subject.Attach(reader1)
-	subject.Attach(reader2)
-	subject.Attach(reader3)
+	subject.Register(observer1)
+	subject.Register(observer2)
 
-	subject.UpdateContext("lizeyuan")
+	subject.NotifyObservers("Hello, Observers!")
+
+	// subject.Unregister(observer1)
 }
